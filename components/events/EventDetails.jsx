@@ -19,12 +19,6 @@ const EventDetails = () => {
                 This is a detailed description of the event. It includes all the
                 necessary information that attendees might need to know.
             </Text>
-            <Button
-                title='Buy Ticket'
-                onPress={() => {
-                    console.log('Ticket Purchased');
-                }}
-            />
         </View>
     );
 };

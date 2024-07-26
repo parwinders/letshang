@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button, ImageBackground } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import EventDetails from '../../components/events/EventDetails';
@@ -19,35 +19,64 @@ const App = () => {
     // renders
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <View style={styles.container}>
-                <BottomSheet
-                    ref={bottomSheetRef}
-                    index={1} // initial snap point index
-                    snapPoints={snapPoints}
-                    onChange={handleSheetChanges}
-                >
-                    <BottomSheetView style={styles.contentContainer}>
-                        <Text>Awesome 🎉</Text>
-                        <EventDetails />
-                        {/* <View
+            <ImageBackground
+                source={{
+                    uri: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                }}
+                style={styles.imageBackground}
+            >
+                <View style={styles.container}>
+                    <View
+                        style={{
+                            backgroundColor: 'white',
+                            width: '100%',
+                            height: '10%',
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            zIndex: 2,
+                            padding: 20,
+                            shadowColor: 'grey',
+                            shadowRadius: 20,
+                        }}
+                    >
+                        <View
                             style={{
-                                backgroundColor: 'red',
-                                height: 50,
-                                width: '100%',
+                                borderRadius: 40,
+                                overflow: 'hidden',
                             }}
-                        ></View> */}
-                    </BottomSheetView>
-                </BottomSheet>
-            </View>
+                        >
+                            <Button
+                                title='Buy Ticket'
+                                onPress={() => {
+                                    console.log('Ticket Purchased');
+                                }}
+                            />
+                        </View>
+                    </View>
+                    <BottomSheet
+                        ref={bottomSheetRef}
+                        index={1} // initial snap point index
+                        snapPoints={snapPoints}
+                        onChange={handleSheetChanges}
+                    >
+                        <BottomSheetView style={styles.contentContainer}>
+                            <EventDetails />
+                        </BottomSheetView>
+                    </BottomSheet>
+                </View>
+            </ImageBackground>
         </GestureHandlerRootView>
     );
 };
 
 const styles = StyleSheet.create({
+    imageBackground: {
+        flex: 1,
+    },
     container: {
         flex: 1,
         padding: 24,
-        backgroundColor: 'grey',
     },
     contentContainer: {
         flex: 1,
