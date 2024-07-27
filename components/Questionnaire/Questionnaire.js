@@ -127,7 +127,6 @@ const QuestionnaireScreen = () => {
                                     style={[
                                         styles.button,
                                         {
-                                            flex: 1,
                                             flexDirection: 'row',
                                             alignItems: 'baseline',
                                             justifyContent: 'center',
