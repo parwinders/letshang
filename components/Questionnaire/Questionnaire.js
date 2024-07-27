@@ -124,6 +124,7 @@ const QuestionnaireScreen = () => {
                         <View style={{ marginBottom: 10 }}>
                             {['Yes', 'No'].map((opt) => (
                                 <TouchableOpacity
+                                    key={opt}
                                     style={[
                                         styles.button,
                                         {
