@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View } from 'react-native';
 import App from './(tabs)';
-import { useNavigation } from 'expo-router';
-import { RecoilRoot, useRecoilState, useRecoilValueLoadable } from 'recoil';
-import { eventsState, fetchEventsSelector } from './recoilState/rstate';
+import { RecoilRoot } from 'recoil';
 import QuestionnaireScreen from '../components/Questionnaire/Questionnaire';
 
 const Stack = createStackNavigator();

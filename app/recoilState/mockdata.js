@@ -6,21 +6,21 @@ export const mockEvents = [
         id: 2,
         question: 'Where did you hear about this event ?',
         type: 'enum',
-        enum: [
+        options: [
             {
                 id: 1,
                 value: 'linkedin',
             },
             {
-                id: 1,
+                id: 2,
                 value: 'instagram',
             },
             {
-                id: 1,
+                id: 3,
                 value: 'twitter',
             },
             {
-                id: 1,
+                id: 4,
                 value: 'facebook',
             },
         ],

@@ -5,7 +5,61 @@ import {
     fetchEventsSelector,
     questionState,
 } from '../../app/recoilState/rstate';
-import { StyleSheet, View, Text, Button, TextInput } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Button,
+    TextInput,
+    TouchableOpacity,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+
+import Animated, {
+    FadeIn,
+    FadeOut,
+    ZoomInRight,
+    ZoomOutLeft,
+} from 'react-native-reanimated';
+import { FontAwesome } from '@expo/vector-icons';
+import { Colors } from '@/constants/Colors';
+import MultiSelect from './MultiSelect';
+
+const { primary, secondary } = Colors.letshang;
+
+const SelectableButton = ({ label, onPress, selected }) => {
+    return (
+        <TouchableOpacity
+            style={[
+                styles.button,
+                {
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'baseline',
+                    justifyContent: 'center',
+                },
+                styles.buttonWrapper,
+            ]}
+            onPress={onPress}
+        >
+            <View>
+                <Text style={styles.buttonText}>{label}</Text>
+            </View>
+            <View style={{ position: 'absolute', right: 0, marginRight: 10 }}>
+                {selected && (
+                    <Animated.View entering={FadeIn} exiting={FadeOut}>
+                        <FontAwesome
+                            name='check-circle'
+                            size={20}
+                            color={primary}
+                            style={styles.icon}
+                        />
+                    </Animated.View>
+                )}
+            </View>
+        </TouchableOpacity>
+    );
+};
 
 const QuestionnaireScreen = () => {
     const [questionIndex, setQuestionIndex] = useState(0);
@@ -18,91 +72,116 @@ const QuestionnaireScreen = () => {
         if (eventsLoadable.state === 'hasValue') {
             setEvents(eventsLoadable.contents);
         }
-    }, [eventsLoadable]);
+    }, [eventsLoadable, setEvents]);
 
     useEffect(() => {
-        console.log('parwinder', { events });
-    });
-    const onPress = () => {
+        console.log('Events:', events);
+    }, [events]);
+
+    const handleNavigate = () => {
         navigation.navigate('Event');
     };
-    const onPressNext = () => {
+
+    useEffect(() => {
+        console.log({ questionIndex });
+        console.log({ complete });
+    }, [questionIndex, complete]);
+
+    const handleNextQuestion = () => {
         if (questionIndex === events.length - 1) {
             setComplete(true);
-            return;
+        } else {
+            setQuestionIndex((prevIndex) => prevIndex + 1);
         }
-        setQuestionIndex((st) => st + 1);
+    };
+
+    const renderQuestionContent = () => {
+        if (!events.length) return null;
+
+        const currentEvent = events[questionIndex];
+        const { question, type, options } = currentEvent;
+
+        return (
+            <Animated.View
+                key={questionIndex}
+                entering={ZoomInRight}
+                exiting={ZoomOutLeft}
+            >
+                <Text style={styles.numberText}>{`Question ${
+                    questionIndex + 1
+                } of ${events.length}`}</Text>
+                <Text style={styles.questionText}>{question}</Text>
+                {type === 'simple' && (
+                    <TextInput
+                        key={questionIndex}
+                        style={styles.input}
+                        placeholder='Write your answer here'
+                        placeholderTextColor='#c5beff'
+                    />
+                )}
+                {type === 'boolean' && (
+                    <View>
+                        <View style={{ marginBottom: 10 }}>
+                            <Button onPress={handleNextQuestion} title='Yes' />
+                        </View>
+                        <View>
+                            <Button onPress={handleNextQuestion} title='No' />
+                        </View>
+                    </View>
+                )}
+                {type === 'enum' && (
+                    <View>
+                        {/* {options.map((option) => (
+                            <SelectableButton
+                                onSelect={() => setComplete(true)}
+                                key={option.id}
+                                title={option.value}
+                            />
+                        ))} */}
+                        <MultiSelect
+                            options={options}
+                            onComplete={() => setComplete(true)}
+                            onPending={() => setComplete(false)}
+                        >
+                            <SelectableButton />
+                        </MultiSelect>
+                    </View>
+                )}
+            </Animated.View>
+        );
     };
 
     return (
-        <View style={styles.container}>
+        <LinearGradient
+            colors={['hsl(248, 100%, 91%)', 'hsl(256, 100%, 96%)']}
+            start={[0, 0]}
+            end={[1, 0]}
+            locations={[0, 0.5, 1]}
+            style={styles.container}
+        >
             <Text
-                onPress={onPress}
-                style={[
-                    { position: 'absolute', top: 0, left: 0 },
-                    { ...styles.movetext },
-                ]}
+                onPress={handleNavigate}
+                style={[styles.moveText, styles.absoluteTopLeft]}
             >
                 Move to Event
             </Text>
-            <View>
-                {events.length ? (
-                    <>
-                        <Text style={styles.numbertext}>{`question ${
-                            questionIndex + 1
-                        } of ${events.length}`}</Text>
-                        <Text
-                            style={styles.text}
-                        >{`${events[questionIndex].question}`}</Text>
-                        {events[questionIndex]?.type === 'simple' ? (
-                            <TextInput
-                                key={questionIndex}
-                                placeholder='Write your answer here'
-                                placeholderTextColor={'blue'}
-                            />
-                        ) : (
-                            <></>
-                        )}
-                        {events[questionIndex]?.type === 'boolean' ? (
-                            <View>
-                                <View style={{ marginBottom: 20 }}>
-                                    <Button title='yes' />
-                                </View>
-                                <Button title='No' />
-                            </View>
-                        ) : (
-                            <></>
-                        )}
-                        {events[questionIndex]?.type === 'enum' ? (
-                            <TextInput
-                                key={questionIndex}
-                                placeholder='Write your answer here'
-                                placeholderTextColor={'blue'}
-                            />
-                        ) : (
-                            <></>
-                        )}
-                    </>
+            <View>{renderQuestionContent()}</View>
+            <View style={styles.footer} key={questionIndex}>
+                {events?.[questionIndex]?.type === 'simple' || complete ? (
+                    <Button
+                        key={complete}
+                        disabled={!events.length}
+                        title={!complete ? 'Next Question' : 'Claim Ticket'}
+                        onPress={
+                            !complete ? handleNextQuestion : handleNavigate
+                        }
+                        color={primary}
+                    />
                 ) : (
                     <></>
                 )}
             </View>
-            <View
-                style={{
-                    borderRadius: 40,
-                    overflow: 'hidden',
-                    width: '80%',
-                    position: 'absolute',
-                    bottom: '10%',
-                }}
-            >
-                <Button
-                    disabled={!events.length}
-                    title={!complete ? 'Next question' : 'Claim Ticket'}
-                    onPress={onPressNext}
-                />
-            </View>
-        </View>
+        </LinearGradient>
     );
 };
 
@@ -111,21 +190,57 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#add8e6', // Light blue background color
+        backgroundColor: '#add8e6',
+    },
+    absoluteTopLeft: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
     },
     text: {
         fontSize: 20,
         color: 'white',
     },
-    numbertext: {
+    numberText: {
         fontSize: 16,
-        color: 'white',
-        // position: 'relative',
-        // right: 60,
+        color: primary,
     },
-    movetext: {
-        fontSize: 16,
-        color: 'white',
+    moveText: {
+        fontSize: 20,
+        color: 'black',
+    },
+    questionText: {
+        fontSize: 20,
+        color: 'black',
+        marginBottom: 20,
+        fontWeight: '500',
+    },
+    input: {
+        marginVertical: 10,
+        padding: 5,
+        color: 'black',
+        fontSize: 20,
+    },
+    buttonWrapper: {
+        marginBottom: 10,
+        backgroundColor: secondary,
+        borderRadius: 5,
+        padding: 10,
+    },
+    buttonText: {
+        fontSize: 20,
+        textTransform: 'capitalize',
+        color: primary,
+    },
+    footer: {
+        borderRadius: 40,
+        overflow: 'hidden',
+        width: '80%',
+        position: 'absolute',
+        bottom: '10%',
+    },
+    placeholder: {
+        fontSize: 20,
     },
 });
 

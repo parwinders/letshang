@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button, ImageBackground } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import EventDetails from '../../components/events/EventDetails';
+import { Colors } from '@/constants/Colors';
 
 const App = () => {
     // ref
@@ -37,7 +38,7 @@ const App = () => {
                             zIndex: 2,
                             padding: 20,
                             shadowColor: 'grey',
-                            shadowRadius: 20,
+                            shadowRadius: 10,
                         }}
                     >
                         <View
@@ -48,6 +49,7 @@ const App = () => {
                         >
                             <Button
                                 title='Buy Ticket'
+                                color={Colors.letshang.primary}
                                 onPress={() => {
                                     console.log('Ticket Purchased');
                                 }}
