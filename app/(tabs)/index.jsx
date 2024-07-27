@@ -1,12 +1,19 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, Button, ImageBackground } from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Button,
+    ImageBackground,
+    Dimensions,
+} from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import EventDetails from '../../components/events/EventDetails';
 import { Colors } from '@/constants/Colors';
 
 const App = () => {
-    // ref
+    const [waitingForApproval, setWaitingForApproval] = useState(false);
     const bottomSheetRef = useRef(null);
 
     // snap points
@@ -30,7 +37,7 @@ const App = () => {
                     <View
                         style={{
                             backgroundColor: 'white',
-                            width: '100%',
+                            width: Dimensions.get('window').width,
                             height: '10%',
                             position: 'absolute',
                             bottom: 0,
@@ -47,13 +54,23 @@ const App = () => {
                                 overflow: 'hidden',
                             }}
                         >
-                            <Button
-                                title='Buy Ticket'
-                                color={Colors.letshang.primary}
-                                onPress={() => {
-                                    console.log('Ticket Purchased');
-                                }}
-                            />
+                            {!waitingForApproval ? (
+                                <Button
+                                    title='Buy Ticket'
+                                    color={Colors.letshang.primary}
+                                    onPress={() => {
+                                        console.log('Ticket Purchased');
+                                        setWaitingForApproval(true);
+                                    }}
+                                />
+                            ) : (
+                                <Button
+                                    title='Waiting for approval'
+                                    color={'orange'}
+                                    onPress={() => {}}
+                                    st
+                                />
+                            )}
                         </View>
                     </View>
                     <BottomSheet

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 const iconSize = 20;
+
 const EventDetails = () => {
     return (
         <View style={styles.eventContainer}>
@@ -12,18 +13,16 @@ const EventDetails = () => {
                         Art Show 🎨
                     </Text>
                     <Text style={styles.detailDescription}>
-                        by olivia adams
+                        by Olivia Adams
                     </Text>
                 </View>
             </View>
             <View style={[styles.detailRow, { marginTop: 10 }]}>
-                {' '}
-                {/* <FontAwesome name='clock-o' size={16} color='black' /> */}
                 <FontAwesome name='calendar' size={iconSize} color='black' />
                 <View style={styles.detailTextContainer}>
-                    <Text style={styles.detailTitle}>Monday Nov 13,2023</Text>
+                    <Text style={styles.detailTitle}>Monday Nov 13, 2023</Text>
                     <Text style={styles.detailDescription}>
-                        6:00pm - 10:00 pm
+                        6:00 PM - 10:00 PM
                     </Text>
                 </View>
             </View>

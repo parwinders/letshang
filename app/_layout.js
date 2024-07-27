@@ -17,11 +17,11 @@ export default function Layout() {
                 >
                     <Stack.Screen
                         name='Question'
-                        component={() => <QuestionnaireScreen />}
+                        children={() => <QuestionnaireScreen />}
                     />
                     <Stack.Screen
                         name='Event'
-                        component={() => <App />}
+                        children={() => <App />}
                         options={{
                             // headerBackTitleVisible: true,
                             headerShown: true,

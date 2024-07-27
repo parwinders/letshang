@@ -33,7 +33,7 @@ const MultiSelect = ({ onComplete, onPending, children, options }) => {
     const isSelected = (optionId) => selectedOptions.includes(optionId);
 
     return (
-        <View style={styles.container}>
+        <View style={{ width: '100%', alignSelf: 'center' }}>
             <FlatList
                 data={options}
                 keyExtractor={(item) => item.id}
@@ -58,8 +58,8 @@ const MultiSelect = ({ onComplete, onPending, children, options }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         padding: 20,
+        backgroundColor: 'red',
     },
     optionContainer: {
         flexDirection: 'row',

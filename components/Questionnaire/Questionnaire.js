@@ -122,10 +122,27 @@ const QuestionnaireScreen = () => {
                 {type === 'boolean' && (
                     <View>
                         <View style={{ marginBottom: 10 }}>
-                            <Button onPress={handleNextQuestion} title='Yes' />
-                        </View>
-                        <View>
-                            <Button onPress={handleNextQuestion} title='No' />
+                            {['Yes', 'No'].map((opt) => (
+                                <TouchableOpacity
+                                    style={[
+                                        styles.button,
+                                        {
+                                            flex: 1,
+                                            flexDirection: 'row',
+                                            alignItems: 'baseline',
+                                            justifyContent: 'center',
+                                        },
+                                        styles.buttonWrapper,
+                                    ]}
+                                    onPress={handleNextQuestion}
+                                >
+                                    <View>
+                                        <Text style={styles.buttonText}>
+                                            {opt}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
+                            ))}
                         </View>
                     </View>
                 )}
@@ -156,7 +173,7 @@ const QuestionnaireScreen = () => {
             colors={['hsl(248, 100%, 91%)', 'hsl(256, 100%, 96%)']}
             start={[0, 0]}
             end={[1, 0]}
-            locations={[0, 0.5, 1]}
+            locations={[0, 1]}
             style={styles.container}
         >
             <Text
@@ -187,15 +204,16 @@ const QuestionnaireScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
         alignItems: 'center',
-        backgroundColor: '#add8e6',
+        justifyContent: 'center',
+        paddingHorizontal: '10%',
     },
     absoluteTopLeft: {
         position: 'absolute',
-        top: 0,
-        left: 0,
+        top: 50,
+        left: 10,
     },
     text: {
         fontSize: 20,
@@ -206,7 +224,7 @@ const styles = StyleSheet.create({
         color: primary,
     },
     moveText: {
-        fontSize: 20,
+        fontSize: 10,
         color: 'black',
     },
     questionText: {
